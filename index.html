@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Twitter</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" type="text/css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body >
+    <div class="content">
+        <nav class="left">
+            <div class="link-container"><a class="brand">Twitter</a></div>
+            <div class="link-container"><a class="nav-item"><i class="material-icons">home</i>Home</a></div>
+            <div class="link-container"><a class="nav-item"><i class="material-icons">explore</i>Explore</a></div>
+            <div class="link-container"><a class="nav-item"><i
+                        class="material-icons">notification_important</i>Notifications</a></div>
+            <div class="link-container"><a class="nav-item"><i class="material-icons">email</i>Messages</a></div>
+            <div class="link-container"><a class="nav-item"><i class="material-icons">bookmark</i>Bookmarks</a></div>
+            <button class="tweet-btn">Tweet</button>
+        </nav>
+        <div class="center">
+            <div class="title" style="background-color:	#1DA1F2; color:white">Home</div>
+            <div class="create-tweet">
+                <!-- <div class="profile"></div>  -->
+                
+                <input onfocus="this.value=''" type="text" id="name" value="name" placeholder="Name" />
+                
+                <input onfocus="this.value=''" type="text" id="message" placeholder="Write Your tweet" maxlength="140" />
+                <i class="material-icons">photo</i>
+                <i class="material-icons">photo_camera</i>
+             
+                <button id="send"><i class="material-icons"  style="color:#1DA1F2;"> send  </i></button>
+            </div>
+            <div class="tweets">
+                <div class="tweet">
+                   <div class="left">
+                         <!-- <div class="profile">
+                           
+                        </div>  -->
+                    </div> 
+                    <div class="right">
+                        <div class="info">
+                            <span class="name"   >twitter</span> 
+                            <span class="tag">@twitterOfficial</span>
+                            <span class="time"> - 1day ago</span>
+                        </div>
+                        <div class="content" id="messages" >
+                          first tweet
+                          <div class="buttons">
+                            <div class="button"><i class="material-icons">comment</i> 1</div>
+                            <div class="button" id="repeat"><i class="material-icons">repeat</i> 5</div>
+                            <div class="button" id="heart"><i class="material-icons">favorite</i> 21</div>
+                            <div class="button"><i class="material-icons">open_in_new</i></div>
+                        </div>
+                       
+                    </div>
+                    </div>
+                </div>
+          
+
+
+
+            </div>
+        </div>
+
+
+
+        <!-- you might like and trending  section code-->
+        <div class="right">
+            <div class="input-container">
+                <input type="text" placeholder="Search New Twitter" />
+            </div>
+            <div class="group">
+                <div class="title">You might like</div>
+                <div class="trending">
+                    <div class="location">Follows you</div>
+                    <div class="subject">Pratik Trivedi</div>
+                </div>
+                <div class="trending">
+                    <div class="location">Trending in USA</div>
+                    <div class="subject">Vaccine</div>
+                </div>
+                <div class="trending">
+                    <div class="location">Trending in India</div>
+                    <div class="subject">President Narendra Modi </div>
+                </div>
+            </div>
+
+
+
+        
+            <div class="group">
+                <div class="title">Trending</div>
+                <div class="trending">
+                    <div class="location">Trending in USA</div>
+                    <div class="subject">Donald Trump</div>
+                    <div class="tweets">153K Tweets</div>
+                    <div class="link">
+                        <div class="details">
+                            <div class="title">Politics</div>
+                            <p class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia,
+                                praesentium voluptates ea rerum itaque expedita corporis similique in eos, repellendus
+                               </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="trending">
+                    <div class="location">Pray For Afganistan</div>
+                    <div class="subject">Talibaan Terror</div>
+                    <div class="tweets">153K Tweets</div>
+                </div>
+
+                <div class="trending">
+                    <div class="location">Trending in USA</div>
+                    <div class="subject">President Carter</div>
+                    <div class="tweets">153K Tweets</div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+        // here send is id of button,  when it will be pressed name and message text will be received
+             $(() => {
+             $("#send").click(()=>{
+                 sendMessage({name: $("#name").val(), message: $("#message").val()});
+             })
+     
+             getMessages()
+         })
+     
+         socket.on('message', addMessages)
+     
+
+         // function to print name and tweet message using html components
+         function addMessages(message){
+             $("#messages").append(`
+             
+
+             <div class="info" >
+                <span class="name" style="margin-top:100px" >${message.name}</span> 
+               <span class="tag">@${message.name}</span>
+               <span class="time"> - 1m</span>
+           </div>
+           <div class="content" >
+            ${message.message}          
+        </div>
+           <div class="buttons">
+            <div class="button"><i class="material-icons">comment</i> </div>
+            <div class="button" id="repeat"><i class="material-icons">repeat</i> </div>
+            <div class="button" id="heart"><i class="material-icons">favorite</i> </div>
+            <div class="button"><i class="material-icons">open_in_new</i></div>
+        </div>            
+             `)
+         }
+     
+         function getMessages(){
+           $.get('http://localhost:3000/messages', (data) => {
+             data.forEach(addMessages);
+           })
+         }
+     
+         function sendMessage(message){
+           $.post('http://localhost:3000/messages', message)
+         }
+     </script>
+</body>
+
+</html>
