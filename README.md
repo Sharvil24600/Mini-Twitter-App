@@ -2,6 +2,13 @@
 
 
     
+## Clone Repository
+
+Git Clone the project with:
+```bash
+  
+https://github.com/Sharvil24600/Mini-Twitter-App.git
+```
 
 
   
