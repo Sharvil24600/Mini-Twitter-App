@@ -62,7 +62,7 @@ io.on('connection', () =>{
   console.log('Yay! User is connected')
 })
 
-mongoose.connect(database ,{useMongoClient : true} ,(err) => {
+mongoose.connect(database ,(err) => {
   console.log('mongodb connected Sucessfully');
 })
 
